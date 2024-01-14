@@ -110,7 +110,7 @@ export class QandaStack extends Stack {
           implicitCodeGrant: true,
           authorizationCodeGrant: true,
         },
-        scopes: [OAuthScope.EMAIL],
+        scopes: [OAuthScope.OPENID],
         callbackUrls: this.props.callbackUrls,
       },
     });
