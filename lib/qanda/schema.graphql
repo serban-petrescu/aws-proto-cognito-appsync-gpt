@@ -1,0 +1,37 @@
+type Question {
+  id: ID!
+  content: String!
+  answers: [Answer]!
+  createdAt: String!
+}
+
+type Answer {
+  id: ID!
+  content: String!
+  questionId: ID!
+  createdAt: String!
+}
+
+type Query {
+  listQuestions(date: String, limit: Int, nextToken: String): QuestionConnection
+    @aws_auth(cognito_groups: ["Readers", "Posters", "Moderators"])
+}
+
+type Mutation {
+  postQuestion(content: String!): Question
+    @aws_auth(cognito_groups: ["Posters"])
+  postAnswer(content: String!, questionId: ID!): Answer
+    @aws_auth(cognito_groups: ["Posters"])
+  deleteQuestion(id: ID!): Boolean
+    @aws_auth(cognito_groups: ["Moderators"])
+}
+
+type QuestionConnection {
+  items: [Question]
+  nextToken: String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

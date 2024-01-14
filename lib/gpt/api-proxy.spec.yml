@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Q&A API
+  version: 1.0.0
+  description: A simplified API for interacting with our Q&A knowledge base.
+servers:
+  - url: https://example.com
+    description: REST API
+paths:
+  /questions:
+    get:
+      operationId: listQuestions
+      summary: List today's questions with their answers
+      responses:
+        "200":
+          description: A list of today's questions and their answers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionWithAnswers"
+    post:
+      operationId: postQuestionWithAnswer
+      summary: Post a question with its answer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionWithAnswer"
+      responses:
+        "200":
+          description: The posted question with its answer
+  /questions/{questionId}/answers:
+    post:
+      operationId: answerQuestion
+      summary: Add an answer to a question
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "200":
+          description: The added answer
+  /questions/{questionId}:
+    delete:
+      operationId: deleteQuestion
+      summary: Delete a question
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Question successfully deleted
+components:
+  schemas:
+    QuestionWithAnswers:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Answer"
+    QuestionWithAnswer:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+    Answer:
+      type: object
+      properties:
+        content:
+          type: string

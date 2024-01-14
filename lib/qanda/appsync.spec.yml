@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: QandA API
+  description: OpenAPI specification for interacting with an AWS AppSync GraphQL API.
+  version: 1.0.0
+servers:
+  - url: https://example.com
+    description: AppSync GraphQL API
+paths:
+  /graphql:
+    post:
+      operationId: executeGraphQL
+      x-openai-isConsequential: false
+      summary: Executes a GraphQL query or mutation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: GraphQL query or mutation. This must be surrounded by a named operation.
+                  example: "query MyQuery { listQuestions { items { content } } }"
+                operationName:
+                  type: string
+                  description: The name of the top-level GraphQL operation (query/mutation). 
+                  example: "MyQuery"
+      responses:
+        '200':
+          description: GraphQL response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: The response data from the GraphQL operation.
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                    description: Errors returned by the GraphQL operation.
